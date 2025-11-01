@@ -1,0 +1,11 @@
+# Only for local development with postgres and docker
+services:
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: db
+    environment:
+      - POSTGRES_DB=webtech_database
+      - POSTGRES_USER=webtech_user
+      - POSTGRES_PASSWORD=webtech_password
+    ports:
+      - "5432:5432"
