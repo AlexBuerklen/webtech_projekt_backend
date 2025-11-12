@@ -6,12 +6,16 @@ import webtechBackend.service.MarkerService.MarkerService;
 import webtechBackend.service.TripService.TripService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/apiMarker")
 public class MarkerController {
+
+    private static final Logger log = LoggerFactory.getLogger(MarkerController.class);
 
     private final MarkerService markerService;
 
@@ -29,6 +33,7 @@ public class MarkerController {
         if(theMarker == null){
             throw new RuntimeException("Marker id: " + markerId + " not found");
         }
+        log.info("Getting Marker: {}", theMarker);
         return theMarker;
     }
 
@@ -36,6 +41,7 @@ public class MarkerController {
     public Marker addMarker(@RequestBody Marker theMarker, @RequestParam int tripId){
         Trip trip = tripService.findById(tripId);
         theMarker.setTrip(trip);
+        log.info("Adding Marker: {}", theMarker);
         return markerService.save(theMarker);
     }
 

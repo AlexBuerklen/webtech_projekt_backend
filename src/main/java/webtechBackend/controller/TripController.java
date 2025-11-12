@@ -9,12 +9,17 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/apiTrip")
 public class TripController {
+
+    private static final Logger log = LoggerFactory.getLogger(TripController.class);
+
     private final TripService tripService;
 
     @GetMapping("/trips")
@@ -24,6 +29,9 @@ public class TripController {
 
     @PostMapping("/trips")
     public Trip addTrip(@RequestBody Trip theTrip){
+
+        log.info("Adding trip: " + theTrip);
+
         return tripService.save(theTrip);
     }
 
@@ -32,6 +40,7 @@ public class TripController {
         Trip trip = tripService.findById(tripId);
         String decodedName = URLDecoder.decode(newTripName, StandardCharsets.UTF_8);
         trip.setName(decodedName);
+        log.info("Changing trip name: " + trip.getName());
         return tripService.save(trip);
     }
 
@@ -39,6 +48,7 @@ public class TripController {
     public Trip addTotalDistance(@RequestBody Double totalDistance, @PathVariable int tripId){
         Trip trip = tripService.findById(tripId);
         trip.setTotalDistance(totalDistance);
+        log.info("addTotalDistance: " + totalDistance);
         return tripService.save(trip);
     }
 
@@ -50,6 +60,9 @@ public class TripController {
         if(theTrip == null){
             throw new RuntimeException("Trip id: " + tripId + " not found");
         }
+
+        log.info("Getting trips: " + theTrip);
+
         return theTrip;
     }
 
